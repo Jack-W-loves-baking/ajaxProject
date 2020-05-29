@@ -1,0 +1,201 @@
+<!--File description: This file is to enable the client to enter all the booking details and view the result -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- import bootstrap -->
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+
+    <!-- import booking.js -->
+    <script type="text/javascript" src="booking.js"> </script>
+
+    <!-- import google.map Autocomplete API -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBg2ro2UdOnmEXFYB5oX4Vd4wXOOe_3kmo&callback=initAutocomplete&libraries=places"
+        async defer></script>
+    <script type="text/javascript" src="autoComplete.js"></script>
+    <title>CabsOnline</title>
+</head>
+
+<body>
+
+    <!-- background photo and title on the project head -->
+    <div class="jumbotron text-center"
+        style="margin-bottom:0; background-image:url('background.png');width:1519px;height:325px;border-radius:0%">
+        <h1 style="color:black">CabsOnline</h1>
+
+    </div>
+
+    <div class="container" style="margin-top:40px">
+
+        <div class="row">
+
+            <!-- left area to insert client details -->
+            <div class="col-sm-6">
+                <form>
+
+                    <!-- customer name input -->
+
+                    <label for="clientnameinput">1. Customer Name:</label>
+
+                    <!-- make input field inside of a div, so when validated, the input will not disppear -->
+                    <input type="text" id="cname" class="form-control" name="cname"
+                        onblur="validateInput('cname','clientNameError',/^[A-Za-z ]+$/)">
+                    <!-- hidden <p>, will be visible if the input is invalid after the validation in onblur event-->
+                    <p id="clientNameError" style="color:red; display:none">&nbsp;* A name cannot be blank and
+                        should only include letters.</p>
+                    <br>
+
+                    <!-- phone input -->
+
+                    <label for="phone">2. Phone:</label>
+                    <input type="text" class="form-control" id="phone" name="phone"
+                        onblur="validateInput('phone','clientPhoneError',/^[0-9 ]+$/)">
+                    <!-- hidden <p>, will be visible if the input is invalid after the validation in onblur event-->
+                    <p id="clientPhoneError" style="color:red; display:none">&nbsp;* Phone numbers cannot be blank and
+                        should only include numbers</p>
+                    <br>
+
+
+                    <!-- pickup location input -->
+                    <label>3. Address:</label>
+                    <div class="col-sm-6">
+                        <input type="radio" class="form-check-input" id="selectGoogle" name="addressgroup"
+                            onclick="handleClick(this)" value="1">Use Google Map Autocomplete
+                        <br>
+                        <input type="radio" class="form-check-input" id="selectManual" name="addressgroup"
+                            onclick="handleClick(this)" value="2">Manually update
+                    </div>
+
+
+                    <div id="googleselect" style="display:none">
+                        <input type="text" class="form-control" id="pickuplocation" name="pickuplocation"
+                            placeholder="search your address..."
+                            onblur="validateInput('pickuplocation','googlemapError',/^\S+$/)">
+                        <p id="googlemapError" style="color:red; display:none">&nbsp;* Pickup address cannot be empty
+                        </p>
+                        <br>
+                    </div>
+
+
+                    <div class="col-sm-12"
+                        style="border:1px solid lightgrey; background-color: lightgoldenrodyellow; display:none"
+                        id="mannualselect">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="unitnumber">Unit Number:</label>
+                                <!-- unit number should only contains numbers -->
+                                <input type="text" class="form-control" id="unitnumber" name="unitnumber"
+                                    placeholder="Optional"
+                                    onblur="validateInput('unitnumber','unitnumberError',/^(([0-9]+)|(\s)*)$/)">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="streetnumber">Street number:</label>
+                                <!-- street number should only contains numbers -->
+                                <input type="text" class="form-control" id="streetnumber" name="streetnumber"
+                                    onblur="validateInput('streetnumber','streetnumberError',/^[0-9]+$/)">
+                            </div>
+                        </div>
+                        <label for="streetname">Street Name:</label>
+                        <!-- street name should only contains letters -->
+                        <input type="text" class="form-control" id="streetname" name="streetname"
+                            onblur="validateInput('streetname','streetnameError',/^[A-Za-z ]+$/)">
+
+                        <label for="pickupsuburb">Suburb:</label>
+                        <!-- suburb should only contains letters -->
+                        <input type="text" class="form-control" id="pickupsuburb" name="pickupsuburb"
+                            onblur="validateInput('pickupsuburb','streetsuburbError',/^[A-Za-z ]+$/)">
+                        <br>
+                        <!-- hidden <p>, will be visible if the input is invalid after the validation in onblur event-->
+                        <p id="unitnumberError" style="color:red; display:none">&nbsp;* Unit numbers should only include
+                            numbers</p>
+                        <p id="streetnumberError" style="color:red; display:none">&nbsp;* Street numbers cannot be blank
+                            and
+                            should only include numbers</p>
+                        <p id="streetnameError" style="color:red; display:none">&nbsp;* A street name cannot be blank
+                            and
+                            should only include letters</p>
+                        <p id="streetsuburbError" style="color:red; display:none">&nbsp;* A suburb cannot be blank and
+                            should only include letters</p>
+
+                    </div>
+                    <br>
+
+                    <!-- destination input -->
+
+                    <label for="destination">4. Destination suburb:</label>
+                    <input type="text" class="form-control" id="destination" name="destination"
+                        onblur="validateInput('destination','clientDestinationError',/^[A-Za-z ]+$/)">
+                    <!-- hidden <p>, will be visible if the input is invalid after the validation in onblur event-->
+                    <p id="clientDestinationError" style="color:red; display:none">&nbsp;* A suburb cannot be blank and
+                        should only include letters</p>
+                    <br>
+
+
+                    <!-- pickup time and date input -->
+                    <label>5. Pick up date and time:</label>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Date(dd-mm-yyyy):<input type="text" class="form-control" id="date" name="date"
+                                onblur="validateInput('date','dateError',/^(0[1-9]|[12][0-9]|3[01])[-](0[1-9]|1[012])[-](2|1)\d\d\d$/)">
+                        </div>
+
+
+                        <div class="col-sm-4">
+                            Hour (24-hour):<input type="text" class="form-control" id="hour" name="hour"
+                                onblur="validateInput('hour','hourError',/^([0-1]?[0-9]|2[0-3])$/)">
+                        </div>
+
+                        <div class="col-sm-2">
+                            Minute:<input type="text" class="form-control" id="minutes" name="minutes"
+                                onblur="validateInput('minutes','minuteError',/^[0-5]?[0-9]$/)">
+                        </div>
+                        <!-- end of row -->
+                    </div>
+                    <p id="dateError" style="color:red; display:none">&nbsp;* Date cannot be blank and should be valid
+                    </p>
+                    <p id="hourError" style="color:red; display:none">&nbsp;* Hour value cannot be blank and only range
+                        from 0-23</p>
+                    <p id="minuteError" style="color:red; display:none">&nbsp;* Minute value cannot be blank and only
+                        range from 0-60</p>
+                    <br><br>
+                    <!-- button onclick to invoke the function in booking.js -->
+                    <input class="btn btn-primary" type="button" name="book" value="Book now"
+                        onclick="passData('serverDatabase.php', 'result')" />
+
+                    <!-- reset all the customer details -->
+                    <input class="btn btn-warning" type="reset" name="reset" value="Reset" />
+                    <br>
+                    <br>
+                </form>
+            </div>
+
+            <!-- empty column -->
+            <div class="col-sm-1">
+            </div>
+
+
+            <div class="col-sm-5">
+                <!-- result from server -->
+                <div class="col-sm-12" style="border:1px solid lightgrey; display: none;" id="result">
+                </div>
+                <br>
+            </div>
+
+            <!-- row div ends -->
+        </div>
+        <!-- container ends -->
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+</body>
+
+</html>

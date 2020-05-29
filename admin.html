@@ -1,0 +1,59 @@
+<!--File description: This file is to enable the admin to either fetch all the bookings required or change the booking status -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <script type="text/javascript" src="admin.js"> </script>
+
+    <title>Admin</title>
+</head>
+
+<body>
+
+    <!-- background photo and title on the project head -->
+    <div class="jumbotron text-center"
+        style="margin-bottom:0; background-image:url('background.png');width:1519px;height:325px;border-radius:0%">
+        <h1 style="color:black">CabsOnline</h1>
+        <h5 style="color:black">Admin Console</h3>
+
+    </div>
+
+    <div class="container" style="margin-top:40px">
+
+        <div class="col-sm-12">
+
+            <!-- show pick-up requests button -->
+            <label>1. Click below to view all <strong><i>'unassigned'</i></strong> bookings within <strong><i>2
+                        hours</i></strong> from now:
+            <br>
+            <input class="btn btn-primary" type="button" name="showall" id="showall" value="show pick-up requests"
+                    onclick="fetchAll('adminFetchAll.php','allResult')" />
+            <br>
+            <div style="text-align: center;" id="allResult">
+            </div>
+            <br>
+
+            <label>2. Assign the booking number to a taxi</label>
+            <input type="text" class="form-control" id="cReference" name="cReference" placeholder="e.g. 10000">
+            <!-- assign taxi button -->
+            <input class="btn btn-primary" type="button" value="assign taxi"
+                    onclick="changeStatus('adminAssignTaxi.php','assignResult','cReference')" />
+            <br>
+
+            <!-- result for assign to taxi button -->
+            <div style="text-align: center;color:red" id="assignResult">
+            </div>          
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</body>
+
+</html>
